@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+/*
+  Design tokens, taken from the reference layout in docs/design-reference.webp:
+  near-black ink for text and primary buttons, a pale blue page frame, soft
+  cloud surfaces and a sky-blue accent pill.
+*/
+@theme {
+  --color-ink: #111111;
+  --color-ink-soft: #4b5059;
+  --color-ink-muted: #8a9099;
+  --color-mist: #eaf2f8;
+  --color-cloud: #f6f8fa;
+  --color-sky: #dcebf7;
+  --color-sky-deep: #9fc6e4;
+  --color-line: #e3e8ee;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.5rem;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 12px 40px -12px rgb(17 17 17 / 0.18);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-mist);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tight display tracking, as in the reference headings. */
+.display {
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-sky-deep);
+  outline-offset: 2px;
+}
