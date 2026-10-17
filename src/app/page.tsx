@@ -1,27 +1,26 @@
-import { ButtonLink } from "@/components/ui/button";
+import { getCountries, getHomePackages } from "@/lib/data/packages";
+import { addDays, toISODate } from "@/lib/format";
+import { Hero } from "@/components/home/hero";
+import { Statement } from "@/components/home/statement";
+import { About } from "@/components/home/about";
+import { Destinations } from "@/components/home/destinations";
+import { Features } from "@/components/home/features";
+import { Cta } from "@/components/home/cta";
 
-/**
- * Phase 0 placeholder. The full home page (hero with search card, stats,
- * destination grid, features, CTA) lands in Phase 2.
- */
-export default function HomePage() {
+export const revalidate = 3600;
+
+export default async function HomePage() {
+  const [packages, countries] = await Promise.all([getHomePackages(5), getCountries()]);
+  const today = toISODate(new Date());
+
   return (
-    <section className="px-4 py-16 sm:px-8 sm:py-24">
-      <h1 className="display max-w-3xl text-5xl font-medium sm:text-7xl">
-        Let’s find your next adventure
-      </h1>
-      <p className="mt-6 max-w-xl text-lg text-ink-soft">
-        Hand-picked tour packages to the world’s most beautiful places. Browse
-        destinations, compare prices and reserve your trip.
-      </p>
-      <div className="mt-8 flex flex-wrap gap-3">
-        <ButtonLink href="/packages" variant="soft" size="lg">
-          Take a tour
-        </ButtonLink>
-        <ButtonLink href="/login" variant="outline" size="lg">
-          Sign In
-        </ButtonLink>
-      </div>
-    </section>
+    <>
+      <Hero countries={countries} today={today} defaultCheckIn={addDays(today, 7)} />
+      <Statement />
+      <About />
+      <Destinations packages={packages} />
+      <Features />
+      <Cta />
+    </>
   );
 }
