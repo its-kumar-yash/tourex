@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { env } from "@/lib/env";
+import { BRAND } from "@/components/logo";
 import "./globals.css";
 
 const inter = Inter({
@@ -14,14 +15,14 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(env.siteUrl),
   title: {
-    default: "Tourex — Find your next adventure",
-    template: "%s · Tourex",
+    default: `${BRAND} — Find your next adventure`,
+    template: `%s · ${BRAND}`,
   },
   description:
     "Hand-picked tour packages to the world's most beautiful places. Browse destinations, compare prices and reserve your trip.",
   openGraph: {
     type: "website",
-    siteName: "Tourex",
+    siteName: BRAND,
   },
 };
 

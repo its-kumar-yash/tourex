@@ -1,4 +1,4 @@
-# Tourex — Implementation Plan
+# Desi Tours and Travels — Implementation Plan
 
 Tours and travel website with package listings, package details, auth, booking requests,
 an admin dashboard and traffic analytics. Reference design: `docs/design-reference.webp`.
@@ -21,7 +21,7 @@ an admin dashboard and traffic analytics. Reference design: `docs/design-referen
 2. **Sign-in methods** — email + password with email verification. Google OAuth is wired behind a flag and only switched on if you provide a Google client id.
 3. **Currency** — prices stored as integer minor units with a `currency` column per package; site displays INR by default. Change if you want USD like the mock.
 4. **Seed content** — 8 packages from the design (Mount Bromo, Mount Fuji, Raja Ampat, Kauai, Azores, Braies lake, +2) with Unsplash placeholder photos. Replace with real photos later via the admin.
-5. **Brand** — "tourex" from the design, with the paper-plane mark.
+5. **Brand** — "Desi Tours and Travels" (confirmed 18 Oct 2026), with the paper-plane mark. Repo stays `tourex`.
 6. **GA4** — you create the property; the measurement id goes in `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
 
 ## Data model (Supabase Postgres)

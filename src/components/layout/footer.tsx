@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Logo } from "@/components/logo";
+import { BRAND, Logo } from "@/components/logo";
 import { navLinks } from "./nav-links";
 
 export function Footer() {
@@ -27,7 +27,7 @@ export function Footer() {
         </nav>
       </div>
       <div className="border-t border-line px-4 py-4 text-xs text-ink-muted sm:px-8">
-        © {new Date().getFullYear()} Tourex. All rights reserved.
+        © {new Date().getFullYear()} {BRAND}. All rights reserved.
       </div>
     </footer>
   );
