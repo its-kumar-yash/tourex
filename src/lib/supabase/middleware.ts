@@ -2,15 +2,16 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { env, hasSupabaseEnv } from "@/lib/env";
 
+const PROTECTED = ["/account", "/admin", "/reset-password"];
+const AUTH_PAGES = ["/login", "/signup"];
+
 /**
- * Refreshes the Supabase session cookie on every matched request so Server
- * Components always see a valid session. Route protection for /account and
- * /admin is added in Phase 3 and 4 respectively.
+ * Refreshes the Supabase session cookie on every matched request and
+ * redirects signed-out visitors away from protected routes. The admin role
+ * itself is checked in the admin layout, where the profile is loaded anyway.
  */
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
-
-  // Phase 0: let the app run before credentials exist.
   if (!hasSupabaseEnv()) return response;
 
   const supabase = createServerClient(env.supabaseUrl, env.supabaseAnonKey, {
@@ -19,9 +20,7 @@ export async function updateSession(request: NextRequest) {
         return request.cookies.getAll();
       },
       setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value }) =>
-          request.cookies.set(name, value),
-        );
+        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
         response = NextResponse.next({ request });
         cookiesToSet.forEach(({ name, value, options }) =>
           response.cookies.set(name, value, options),
@@ -30,9 +29,33 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  // Do not run code between createServerClient and getUser(): a missing
-  // await here is the classic cause of users being logged out at random.
-  await supabase.auth.getUser();
+  // Do not run code between createServerClient and getUser().
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
+  const { pathname, search } = request.nextUrl;
+  const isProtected = PROTECTED.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  const isAuthPage = AUTH_PAGES.includes(pathname);
+
+  let target: URL | null = null;
+  if (!user && isProtected) {
+    target = request.nextUrl.clone();
+    target.pathname = "/login";
+    target.search = "";
+    target.searchParams.set("next", pathname + search);
+  } else if (user && isAuthPage) {
+    target = request.nextUrl.clone();
+    target.pathname = request.nextUrl.searchParams.get("next")?.startsWith("/")
+      ? request.nextUrl.searchParams.get("next")!
+      : "/account";
+    target.search = "";
+  }
+
+  if (target) {
+    const redirect = NextResponse.redirect(target);
+    response.cookies.getAll().forEach((c) => redirect.cookies.set(c));
+    return redirect;
+  }
   return response;
 }

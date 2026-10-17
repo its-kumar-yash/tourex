@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
-import { ButtonLink } from "@/components/ui/button";
+import { AuthButton } from "./auth-button";
 import { MobileNav } from "./mobile-nav";
 import { navLinks } from "./nav-links";
 
 /**
  * Site header. Server Component; only the mobile menu toggle ships JS.
- * The sign-in button becomes an account menu in Phase 3.
+ * Auth state is read in the browser by AuthButton so pages stay static.
  */
 export function Navbar() {
   return (
@@ -30,14 +30,9 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ButtonLink
-            href="/login"
-            variant="outline"
-            size="sm"
-            className="hidden md:inline-flex"
-          >
-            Sign In
-          </ButtonLink>
+          <div className="hidden md:block">
+            <AuthButton />
+          </div>
           <MobileNav />
         </div>
       </div>

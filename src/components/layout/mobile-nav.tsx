@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
 import { usePathname } from "next/navigation";
-import { ButtonLink } from "@/components/ui/button";
+import { AuthButton } from "./auth-button";
 import { navLinks } from "./nav-links";
 
 export function MobileNav() {
@@ -58,9 +58,9 @@ export function MobileNav() {
               </li>
             ))}
           </ul>
-          <ButtonLink href="/login" className="mt-3 w-full">
-            Sign In
-          </ButtonLink>
+          <div className="mt-3">
+            <AuthButton full />
+          </div>
         </div>
       )}
     </div>

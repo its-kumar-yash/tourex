@@ -14,7 +14,7 @@ export function formatPrice(minor: number, currency = "INR") {
   return fmt.format(minor / 100);
 }
 
-const dateFmt = new Intl.DateTimeFormat("en-IN", {
+const dateFmt = new Intl.DateTimeFormat("en-GB", {
   weekday: "short",
   day: "numeric",
   month: "short",
