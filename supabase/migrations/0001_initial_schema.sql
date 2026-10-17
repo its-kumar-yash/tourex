@@ -179,8 +179,7 @@ create table public.bookings (
   admin_note    text,
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now(),
-  check (check_out > check_in),
-  check (check_in >= current_date - interval '1 day')
+  check (check_out > check_in)
 );
 
 create index bookings_user_idx on public.bookings (user_id, created_at desc);
@@ -205,6 +204,9 @@ begin
   select * into pkg from public.packages where id = new.package_id;
   if not found or not pkg.is_published then
     raise exception 'package is not available' using errcode = '23503';
+  end if;
+  if new.check_in < current_date then
+    raise exception 'check-in date is in the past' using errcode = '23514';
   end if;
   if new.guests > pkg.max_guests then
     raise exception 'guests exceed the package limit of %', pkg.max_guests using errcode = '23514';
