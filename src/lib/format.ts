@@ -39,3 +39,15 @@ export function addDays(iso: string, days: number) {
 export function plural(n: number, one: string, many = `${one}s`) {
   return `${n} ${n === 1 ? one : many}`;
 }
+
+const istDay = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Kolkata",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+/** Calendar date in Asia/Kolkata, `n` days ago, as yyyy-mm-dd. Matches the analytics views. */
+export function istDaysAgo(n = 0) {
+  return istDay.format(new Date(Date.now() - n * 86400e3));
+}

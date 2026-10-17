@@ -7,6 +7,7 @@ import type { SearchParams } from "@/lib/filters";
 import { Gallery } from "@/components/packages/gallery";
 import { Itinerary } from "@/components/packages/itinerary";
 import { ReserveCard } from "@/components/packages/reserve-card";
+import { TrackPackageView } from "@/components/analytics/track-package-view";
 import { Rating } from "@/components/ui/rating";
 import { ArrowLeftIcon, ClockIcon, PinIcon, UserIcon } from "@/components/ui/icons";
 
@@ -68,6 +69,7 @@ export default async function PackagePage({ params, searchParams }: Props) {
 
   return (
     <article className="px-4 py-6 sm:px-8 sm:py-10">
+      <TrackPackageView packageId={pkg.id} slug={pkg.slug} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

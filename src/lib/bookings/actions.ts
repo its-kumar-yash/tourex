@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { addDays, toISODate } from "@/lib/format";
@@ -57,6 +58,16 @@ export async function createBooking(_prev: BookingState, formData: FormData): Pr
     const msg = error?.message ?? "";
     return { error: /guests|check-in|available/.test(msg) ? msg : "Could not create the booking. Please try again." };
   }
+
+  // First-party analytics: the conversion event, tied to the visitor session.
+  const sid = (await cookies()).get("dt_sid")?.value ?? "server";
+  await supabase.from("analytics_events").insert({
+    event: "booking_submitted",
+    path: `/packages/${slug}`,
+    package_id: pkg.id,
+    session_id: sid.slice(0, 64),
+    user_id: user.id,
+  });
 
   // Keep the contact details on the profile for next time.
   await supabase.from("profiles").update({ full_name: contactName, phone: contactPhone }).eq("id", user.id);

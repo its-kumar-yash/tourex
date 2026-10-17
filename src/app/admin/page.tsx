@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { formatDate, formatPrice } from "@/lib/format";
+import { formatDate, formatPrice, istDaysAgo } from "@/lib/format";
 import { StatusBadge } from "@/components/account/status-badge";
 import { Kpi, PageHeader, table } from "@/components/admin/ui";
 import type { BookingStatus } from "@/lib/supabase/types";
 
 export default async function AdminOverview() {
   const supabase = await createClient();
-  const since7 = new Date(Date.now() - 7 * 86400e3).toISOString().slice(0, 10);
+  const since7 = istDaysAgo(6);
 
   const [visitors, bookings, packages, topPackages, latest] = await Promise.all([
     supabase.from("daily_visitors").select("*").gte("day", since7).order("day", { ascending: false }),
@@ -21,7 +21,7 @@ export default async function AdminOverview() {
       .limit(8),
   ]);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = istDaysAgo(0);
   const vRows = visitors.data ?? [];
   const todayVisitors = vRows.find((r) => r.day === today)?.visitors ?? 0;
   const weekVisitors = vRows.reduce((s, r) => s + r.visitors, 0);
