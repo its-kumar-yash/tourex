@@ -1,3 +1,6 @@
+// Scoped to the list page by the (list) route group so the skeleton does not
+// wrap /packages/[slug]; a parent loading boundary would stream a 200 shell
+// before the package lookup could return a 404.
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {

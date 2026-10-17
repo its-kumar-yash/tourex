@@ -5,7 +5,7 @@ import { ArrowUpRightIcon } from "@/components/ui/icons";
 import { SearchCard } from "./search-card";
 
 const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=2000&q=75";
+  "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1600&q=70";
 
 export function Hero({
   countries,

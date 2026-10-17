@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllPackageSlugs, getPackageBySlug } from "@/lib/data/packages";
-import { addDays, formatPrice, plural, toISODate } from "@/lib/format";
-import type { SearchParams } from "@/lib/filters";
+import { formatPrice, plural } from "@/lib/format";
 import { Gallery } from "@/components/packages/gallery";
 import { Itinerary } from "@/components/packages/itinerary";
 import { ReserveCard } from "@/components/packages/reserve-card";
@@ -14,10 +14,7 @@ import { ArrowLeftIcon, ClockIcon, PinIcon, UserIcon } from "@/components/ui/ico
 export const revalidate = 3600;
 export const dynamicParams = true;
 
-type Props = {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<SearchParams>;
-};
+type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
   const rows = await getAllPackageSlugs();
@@ -26,7 +23,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pkg = await getPackageBySlug((await params).slug);
-  if (!pkg) return { title: "Package not found" };
+  if (!pkg) return { title: "Package not found", robots: { index: false } };
   return {
     title: pkg.title,
     description: pkg.summary,
@@ -39,18 +36,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function PackagePage({ params, searchParams }: Props) {
-  const [{ slug }, sp] = await Promise.all([params, searchParams]);
+export default async function PackagePage({ params }: Props) {
+  const { slug } = await params;
   const pkg = await getPackageBySlug(slug);
   if (!pkg) notFound();
-
-  const today = toISODate(new Date());
-  const requestedCheckIn = typeof sp.checkIn === "string" ? sp.checkIn : "";
-  const defaultCheckIn =
-    /^\d{4}-\d{2}-\d{2}$/.test(requestedCheckIn) && requestedCheckIn >= today
-      ? requestedCheckIn
-      : addDays(today, 7);
-  const defaultGuests = Math.max(1, Number(sp.guests) || 2);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -129,16 +118,15 @@ export default async function PackagePage({ params, searchParams }: Props) {
         </div>
 
         <aside className="lg:sticky lg:top-24 lg:self-start">
-          <ReserveCard
-            slug={pkg.slug}
-            priceMinor={pkg.price_minor}
-            currency={pkg.currency}
-            durationDays={pkg.duration_days}
-            maxGuests={pkg.max_guests}
-            today={today}
-            defaultCheckIn={defaultCheckIn}
-            defaultGuests={defaultGuests}
-          />
+          <Suspense fallback={<div className="h-80 rounded-[var(--radius-card)] border border-line bg-white" />}>
+            <ReserveCard
+              slug={pkg.slug}
+              priceMinor={pkg.price_minor}
+              currency={pkg.currency}
+              durationDays={pkg.duration_days}
+              maxGuests={pkg.max_guests}
+            />
+          </Suspense>
         </aside>
       </div>
     </article>

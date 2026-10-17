@@ -1,9 +1,10 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { createBooking } from "@/lib/bookings/actions";
-import { addDays, formatPrice, plural } from "@/lib/format";
+import { addDays, formatPrice, plural, toISODate } from "@/lib/format";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/field";
 
@@ -13,19 +14,31 @@ type Props = {
   currency: string;
   durationDays: number;
   maxGuests: number;
-  today: string; // ISO, from the server
-  defaultCheckIn: string;
-  defaultGuests: number;
 };
+
+const ISO = /^\d{4}-\d{2}-\d{2}$/;
 
 type Auth = { signedIn: boolean; name: string; phone: string } | null;
 
+/**
+ * The page is static; dates and the visitor's session are resolved in the
+ * browser so one cached page serves everyone.
+ */
 export function ReserveCard(p: Props) {
-  const [checkIn, setCheckIn] = useState(p.defaultCheckIn);
-  const [guests, setGuests] = useState(Math.min(p.defaultGuests, p.maxGuests));
+  const params = useSearchParams();
+  const [today, setToday] = useState("");
+  const [checkIn, setCheckIn] = useState("");
+  const [guests, setGuests] = useState(() => Math.min(Math.max(1, Number(params.get("guests")) || 2), p.maxGuests));
   const [auth, setAuth] = useState<Auth>(null);
+
+  useEffect(() => {
+    const t = toISODate(new Date());
+    const wanted = params.get("checkIn") ?? "";
+    setToday(t);
+    setCheckIn(ISO.test(wanted) && wanted >= t ? wanted : addDays(t, 7));
+  }, [params]);
   const [state, formAction, pending] = useActionState(createBooking, {});
-  const checkOut = addDays(checkIn, p.durationDays);
+  const checkOut = checkIn ? addDays(checkIn, p.durationDays) : "";
   const total = p.priceMinor * guests;
 
   useEffect(() => {
@@ -71,7 +84,7 @@ export function ReserveCard(p: Props) {
             id="r-checkin"
             name="check_in"
             type="date"
-            min={p.today}
+            min={today}
             required
             value={checkIn}
             onChange={(e) => e.target.value && setCheckIn(e.target.value)}

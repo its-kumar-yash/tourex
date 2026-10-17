@@ -37,11 +37,11 @@ export function PackageCard({
 
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-lg font-medium leading-snug">
+          <h2 className="text-lg font-medium leading-snug">
             <Link href={`/packages/${pkg.slug}`} className="hover:underline">
               {pkg.title}
             </Link>
-          </h3>
+          </h2>
           <Rating value={pkg.rating} className="shrink-0 pt-1" />
         </div>
         <p className="mt-1 inline-flex items-center gap-1 text-sm text-ink-soft">

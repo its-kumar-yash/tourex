@@ -6,7 +6,6 @@ export function Logo({ className = "" }: { className?: string }) {
   return (
     <Link
       href="/"
-      aria-label={`${BRAND} home`}
       className={`inline-flex items-center gap-2 text-lg tracking-tight sm:text-xl ${className}`}
     >
       <svg

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createPublicClient } from "@/lib/supabase/public";
 import type { Tables } from "@/lib/supabase/types";
 
@@ -127,7 +128,8 @@ export async function getCountries() {
   return [...new Set((data ?? []).map((r) => r.country))];
 }
 
-export async function getPackageBySlug(slug: string) {
+/** Memoised per request: generateMetadata and the page share one query. */
+export const getPackageBySlug = cache(async (slug: string) => {
   const sb = createPublicClient();
   const { data, error } = await sb
     .from("packages")
@@ -139,7 +141,7 @@ export async function getPackageBySlug(slug: string) {
     .maybeSingle();
   if (error) throw new Error(`getPackageBySlug: ${error.message}`);
   return (data as PackageDetail | null) ?? null;
-}
+});
 
 export async function getAllPackageSlugs() {
   const sb = createPublicClient();
