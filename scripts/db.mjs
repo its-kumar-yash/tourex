@@ -32,9 +32,13 @@ switch (task) {
   case "push":
     result = run(["db", "push", "--db-url", dbUrl, "--yes"]);
     break;
-  case "seed":
-    result = run(["db", "query", "--db-url", dbUrl, "--file", "supabase/seed.sql"]);
+  case "seed": {
+    // `db query` sends one prepared statement, so wrap the multi-statement
+    // seed in a single DO block.
+    const sql = readFileSync("supabase/seed.sql", "utf8");
+    result = run(["db", "query", "--db-url", dbUrl, `do $seed$ begin\n${sql}\nend $seed$;`]);
     break;
+  }
   case "types": {
     result = run(["gen", "types", "typescript", "--db-url", dbUrl, "--schema", "public"], {
       stdio: ["inherit", "pipe", "inherit"],
