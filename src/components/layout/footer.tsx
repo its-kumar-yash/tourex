@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BRAND, Logo } from "@/components/logo";
 import { navLinks } from "./nav-links";
+import { CookieSettingsButton } from "@/components/consent/cookie-settings-button";
 
 export function Footer() {
   return (
@@ -26,8 +27,14 @@ export function Footer() {
           </ul>
         </nav>
       </div>
-      <div className="border-t border-line px-4 py-4 text-xs text-ink-muted sm:px-8">
-        © {new Date().getFullYear()} {BRAND}. All rights reserved.
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-4 py-4 text-xs text-ink-muted sm:px-8">
+        <span>© {new Date().getFullYear()} {BRAND}. All rights reserved.</span>
+        <span className="flex gap-4">
+          <Link href="/privacy" className="underline-offset-4 hover:text-ink hover:underline">
+            Privacy
+          </Link>
+          <CookieSettingsButton />
+        </span>
       </div>
     </footer>
   );

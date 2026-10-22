@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import { TrackPageView } from "@/components/analytics/track-page-view";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
+import { ConsentBanner } from "@/components/consent/consent-banner";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { env } from "@/lib/env";
@@ -42,8 +43,9 @@ export default function RootLayout({
             <Footer />
           </div>
         </div>
+        <ConsentBanner />
+        {env.gaMeasurementId && <GoogleAnalytics gaId={env.gaMeasurementId} />}
       </body>
-      {env.gaMeasurementId && <GoogleAnalytics gaId={env.gaMeasurementId} />}
     </html>
   );
 }
