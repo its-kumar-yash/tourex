@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
 
-type Variant = "primary" | "accent" | "soft" | "outline" | "ghost";
+type Variant = "primary" | "accent" | "soft" | "outline" | "ghost" | "danger-ghost" | "outline-light" | "ghost-light";
 type Size = "xs" | "sm" | "md" | "lg";
 
 const base =
@@ -13,6 +13,12 @@ const variants: Record<Variant, string> = {
   soft: "bg-sky text-ink hover:bg-[#fbd3a2]",
   outline: "border border-line bg-white text-ink hover:border-sky-deep hover:bg-cloud",
   ghost: "text-ink hover:bg-cloud",
+  "danger-ghost": "text-maroon hover:bg-cloud",
+  // For dark backgrounds (hero photo, maroon banners). Pass these instead of
+  // overriding colours with className: utility order, not class order, decides
+  // which colour wins, which is how "Talk to us" ended up white on white.
+  "outline-light": "border border-white/60 bg-white/5 text-white hover:border-white hover:bg-white/15",
+  "ghost-light": "text-white hover:bg-white/10",
 };
 
 const sizes: Record<Size, string> = {

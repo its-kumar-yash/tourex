@@ -117,7 +117,7 @@ export function MobileAuthActions({ onNavigate }: { onNavigate: () => void }) {
           router.push("/");
           router.refresh();
         }}
-        className={buttonClasses({ variant: "ghost", className: "w-full text-maroon" })}
+        className={buttonClasses({ variant: "danger-ghost", className: "w-full" })}
       >
         Sign out
       </button>

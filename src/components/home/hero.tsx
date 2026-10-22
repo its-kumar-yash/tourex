@@ -31,7 +31,7 @@ export function Hero({ locations }: { locations: string[] }) {
                 <ArrowUpRightIcon className="h-5 w-5" />
               </span>
             </ButtonLink>
-            <ButtonLink href="/contact" variant="ghost" size="lg" className="text-white hover:bg-white/10">
+            <ButtonLink href="/contact" variant="ghost-light" size="lg">
               Plan a custom trip
             </ButtonLink>
           </div>

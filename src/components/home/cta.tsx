@@ -13,7 +13,7 @@ export function Cta() {
         <p className="relative mx-auto mt-4 max-w-lg text-white/85">{site.cta.body}</p>
         <div className="relative mt-8 flex flex-wrap justify-center gap-3">
           <ButtonLink href="/packages" variant="accent" size="lg">Browse packages</ButtonLink>
-          <ButtonLink href="/contact" size="lg" variant="outline" className="border-white/40 bg-transparent text-white hover:bg-white/10">
+          <ButtonLink href="/contact" size="lg" variant="outline-light">
             Talk to us
           </ButtonLink>
         </div>
