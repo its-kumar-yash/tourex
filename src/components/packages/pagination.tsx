@@ -29,7 +29,7 @@ export function Pagination({
         <span key={p} className="contents">
           {i > 0 && pages[i - 1] !== p - 1 && <span className="px-1 text-ink-muted">…</span>}
           {p === page ? (
-            <span aria-current="page" className={`${item} bg-ink text-white`}>
+            <span aria-current="page" className={`${item} bg-maroon text-white`}>
               {p}
             </span>
           ) : (

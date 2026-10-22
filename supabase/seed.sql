@@ -67,7 +67,6 @@ insert into public.package_images (package_id, url, alt, sort_order) values
   ('00000000-0000-4000-8000-000000000001', 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=1600&q=80', 'Houseboat on the Kerala backwaters', 0),
   ('00000000-0000-4000-8000-000000000001', 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=1600&q=80', 'Palm-lined canal in Alleppey', 1),
   ('00000000-0000-4000-8000-000000000002', 'https://images.unsplash.com/photo-1581791534721-e599df4417f7?w=1600&q=80', 'Mountain road in Ladakh', 0),
-  ('00000000-0000-4000-8000-000000000002', 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1600&q=80', 'Himalayan lake and peaks', 1),
   ('00000000-0000-4000-8000-000000000003', 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1600&q=80', 'Goa beach at sunset', 0),
   ('00000000-0000-4000-8000-000000000003', 'https://images.unsplash.com/photo-1587922546307-776227941871?w=1600&q=80', 'Palm trees on a Goa beach', 1),
   ('00000000-0000-4000-8000-000000000004', 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=1600&q=80', 'Palace architecture in Jaipur', 0),

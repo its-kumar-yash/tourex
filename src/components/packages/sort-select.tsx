@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { SORT_KEYS, type PackageFilters, type SortKey } from "@/lib/data/packages";
 import { filtersToQuery } from "@/lib/filters";
 import { Select } from "@/components/ui/field";
+import { startNavigationProgress } from "@/components/layout/navigation-progress";
 
 const labels: Record<SortKey, string> = {
   recommended: "Recommended",
@@ -22,11 +23,12 @@ export function SortSelect({ filters }: { filters: PackageFilters }) {
         aria-label="Sort packages"
         className="h-10 w-auto min-w-44"
         value={filters.sort ?? "recommended"}
-        onChange={(e) =>
+        onChange={(e) => {
+          startNavigationProgress();
           router.push(
             `/packages${filtersToQuery(filters, { sort: e.target.value as SortKey, page: 1 })}`,
-          )
-        }
+          );
+        }}
       >
         {SORT_KEYS.map((k) => (
           <option key={k} value={k}>

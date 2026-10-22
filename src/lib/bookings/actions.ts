@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { addDays, toISODate } from "@/lib/format";
+import { normalizePhone } from "@/lib/phone";
 
 export type BookingState = { error?: string };
 
@@ -15,13 +16,13 @@ export async function createBooking(_prev: BookingState, formData: FormData): Pr
   const checkIn = String(formData.get("check_in") ?? "");
   const guests = Number(formData.get("guests"));
   const contactName = String(formData.get("contact_name") ?? "").trim();
-  const contactPhone = String(formData.get("contact_phone") ?? "").trim();
+  const contactPhone = normalizePhone(String(formData.get("contact_phone") ?? "")) ?? "";
   const note = String(formData.get("note") ?? "").trim().slice(0, 1000);
 
   if (!ISO.test(checkIn) || checkIn < toISODate(new Date())) return { error: "Pick a check-in date from today onwards." };
   if (!Number.isInteger(guests) || guests < 1) return { error: "Guests must be at least 1." };
   if (contactName.length < 2) return { error: "Please enter a contact name." };
-  if (!/^[+\d][\d\s-]{6,19}$/.test(contactPhone)) return { error: "Please enter a valid phone number." };
+  if (!contactPhone) return { error: "Please enter a valid mobile number." };
 
   const supabase = await createClient();
   const {

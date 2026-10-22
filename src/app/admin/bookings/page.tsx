@@ -1,3 +1,4 @@
+import { PendingButton } from "@/components/ui/pending-button";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { updateBookingStatus } from "@/lib/admin/actions";
@@ -30,12 +31,12 @@ export default async function AdminBookings({ searchParams }: { searchParams: Pr
   return (
     <>
       <PageHeader title="Bookings" description="Confirm or reject requests. The guest sees the status and your note on their account page." />
-      <nav className="mt-6 flex gap-1 text-sm">
+      <nav aria-label="Booking status" className="mt-6 flex flex-wrap gap-1 text-sm">
         {STATUSES.map((s) => (
           <Link
             key={s}
             href={`/admin/bookings?status=${s}`}
-            className={`rounded-full px-3 py-1.5 capitalize ${s === filter ? "bg-ink text-white" : "text-ink-soft hover:bg-cloud"}`}
+            className={`rounded-full px-3 py-1.5 capitalize ${s === filter ? "bg-maroon text-white" : "text-ink-soft hover:bg-cloud"}`}
           >
             {s}
           </Link>
@@ -84,13 +85,13 @@ export default async function AdminBookings({ searchParams }: { searchParams: Pr
                     />
                     <div className="flex gap-1">
                       {b.status !== "confirmed" && (
-                        <button type="submit" name="status" value="confirmed" className={`${smallButton} border-emerald-200 text-emerald-800`}>Confirm</button>
+                        <PendingButton name="status" value="confirmed" className={`${smallButton} border-emerald-200 text-emerald-800`}>Confirm</PendingButton>
                       )}
                       {b.status !== "rejected" && (
-                        <button type="submit" name="status" value="rejected" className={`${smallButton} border-red-200 text-red-700`}>Reject</button>
+                        <PendingButton name="status" value="rejected" className={`${smallButton} border-red-200 text-red-700`}>Reject</PendingButton>
                       )}
                       {b.status !== "pending" && (
-                        <button type="submit" name="status" value="pending" className={smallButton}>Reopen</button>
+                        <PendingButton name="status" value="pending" className={smallButton}>Reopen</PendingButton>
                       )}
                     </div>
                   </form>

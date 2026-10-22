@@ -2,9 +2,9 @@
 
 import { openConsentSettings } from "@/lib/consent";
 
-export function CookieSettingsButton() {
+export function CookieSettingsButton({ className = "hover:text-white" }: { className?: string }) {
   return (
-    <button type="button" onClick={openConsentSettings} className="underline-offset-4 hover:text-ink hover:underline">
+    <button type="button" onClick={openConsentSettings} className={className}>
       Cookie settings
     </button>
   );

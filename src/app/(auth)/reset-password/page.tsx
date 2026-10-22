@@ -8,9 +8,9 @@ export const metadata: Metadata = { title: "Choose a new password" };
 export default function ResetPasswordPage() {
   return (
     <>
-      <h1 className="display text-3xl font-medium">Choose a new password</h1>
+      <h1 className="display text-3xl">Choose a new password</h1>
       <div className="mt-6">
-        <AuthForm action={updatePassword} submitLabel="Update password">
+        <AuthForm action={updatePassword} submitLabel="Update password" pendingLabel="Updating…">
           <div>
             <Label htmlFor="password">New password</Label>
             <Input id="password" name="password" type="password" autoComplete="new-password" required minLength={8} />

@@ -76,7 +76,7 @@ export function ConsentBanner() {
               </span>
               <input
                 type="checkbox"
-                className="mt-1 h-5 w-5 shrink-0 accent-[var(--color-ink)]"
+                className="mt-1 h-5 w-5 shrink-0 accent-[var(--color-maroon)]"
                 checked={analytics}
                 onChange={(e) => setAnalytics(e.target.checked)}
               />
@@ -90,7 +90,7 @@ export function ConsentBanner() {
               </span>
               <input
                 type="checkbox"
-                className="mt-1 h-5 w-5 shrink-0 accent-[var(--color-ink)]"
+                className="mt-1 h-5 w-5 shrink-0 accent-[var(--color-maroon)]"
                 checked={marketing}
                 onChange={(e) => setMarketing(e.target.checked)}
               />

@@ -44,7 +44,7 @@ export default function PrivacyPage() {
           </ul>
           <p className="mt-3">
             Until you choose, Google receives only cookieless signals without identifiers. You can
-            change your choice at any time: <CookieSettingsButton />.
+            change your choice at any time: <CookieSettingsButton className="text-ink underline underline-offset-2" />.
           </p>
         </section>
 

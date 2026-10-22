@@ -1,3 +1,4 @@
+import { PendingButton } from "@/components/ui/pending-button";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatPrice } from "@/lib/format";
@@ -50,9 +51,9 @@ export default async function AdminPackages({ searchParams }: { searchParams: Pr
                     <input type="hidden" name="id" value={p.id} />
                     <input type="hidden" name="field" value="is_published" />
                     <input type="hidden" name="value" value={String(!p.is_published)} />
-                    <button type="submit" className={smallButton}>
+                    <PendingButton className={smallButton}>
                       {p.is_published ? "Published · unpublish" : "Draft · publish"}
-                    </button>
+                    </PendingButton>
                   </form>
                 </td>
                 <td className={table.td}>
@@ -60,7 +61,7 @@ export default async function AdminPackages({ searchParams }: { searchParams: Pr
                     <input type="hidden" name="id" value={p.id} />
                     <input type="hidden" name="field" value="is_featured" />
                     <input type="hidden" name="value" value={String(!p.is_featured)} />
-                    <button type="submit" className={smallButton}>{p.is_featured ? "Yes" : "No"}</button>
+                    <PendingButton className={smallButton}>{p.is_featured ? "Yes" : "No"}</PendingButton>
                   </form>
                 </td>
                 <td className={table.td}>

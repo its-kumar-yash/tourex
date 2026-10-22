@@ -73,7 +73,7 @@ export function PackageFiltersForm({
         <legend className="mb-1.5 text-sm font-medium">Duration</legend>
         <div className="space-y-1.5 text-sm">
           <label className="flex items-center gap-2">
-            <input type="radio" name="duration" value="" defaultChecked={!filters.duration} />
+            <input className="accent-[var(--color-maroon)]" type="radio" name="duration" value="" defaultChecked={!filters.duration} />
             Any
           </label>
           {(Object.keys(DURATIONS) as (keyof typeof DURATIONS)[]).map((key) => (

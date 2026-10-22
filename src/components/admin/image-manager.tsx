@@ -1,5 +1,6 @@
 "use client";
 
+import { PendingButton } from "@/components/ui/pending-button";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -65,7 +66,7 @@ export function ImageManager({
           multiple
           disabled={busy}
           onChange={(e) => upload(e.target.files)}
-          className="text-sm file:mr-3 file:rounded-full file:border-0 file:bg-ink file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
+          className="text-sm file:mr-3 file:rounded-full file:border-0 file:bg-maroon file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
         />
         {busy && <span className="text-sm text-ink-soft">Uploading…</span>}
       </div>
@@ -79,7 +80,7 @@ export function ImageManager({
               <div className="relative aspect-[4/3] bg-cloud">
                 <Image src={img.url} alt={img.alt} fill sizes="240px" className="object-cover" />
                 {isCover && (
-                  <span className="absolute left-2 top-2 rounded-full bg-ink px-2 py-0.5 text-xs text-white">Cover</span>
+                  <span className="absolute left-2 top-2 rounded-full bg-maroon px-2 py-0.5 text-xs text-white">Cover</span>
                 )}
               </div>
               <div className="flex items-center justify-between gap-2 p-2">
@@ -87,13 +88,13 @@ export function ImageManager({
                   <form action={setCoverImage}>
                     <input type="hidden" name="package_id" value={packageId} />
                     <input type="hidden" name="url" value={img.url} />
-                    <button type="submit" className={smallButton}>Use as cover</button>
+                    <PendingButton className={smallButton}>Use as cover</PendingButton>
                   </form>
                 ) : <span />}
                 <form action={removePackageImage}>
                   <input type="hidden" name="id" value={img.id} />
                   <input type="hidden" name="package_id" value={packageId} />
-                  <button type="submit" className={`${smallButton} text-red-700`}>Remove</button>
+                  <PendingButton confirm="Remove this photo?" className={`${smallButton} text-red-700`}>Remove</PendingButton>
                 </form>
               </div>
             </li>

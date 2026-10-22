@@ -1,135 +1,91 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { addDays } from "@/lib/format";
+import { useState } from "react";
+import { DURATIONS } from "@/lib/data/packages";
+import { startNavigationProgress } from "@/components/layout/navigation-progress";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Select } from "@/components/ui/field";
-import { CalendarIcon, FlightIcon, HotelIcon, PinIcon, PlaneIcon, UserIcon } from "@/components/ui/icons";
+import { ClockIcon, PinIcon, UserIcon } from "@/components/ui/icons";
 
-type Props = { countries: string[]; today: string; defaultCheckIn: string };
+const BUDGETS = [
+  { value: "", label: "Any budget" },
+  { value: "15000", label: "Under ₹15,000" },
+  { value: "30000", label: "Under ₹30,000" },
+  { value: "50000", label: "Under ₹50,000" },
+  { value: "100000", label: "Under ₹1,00,000" },
+];
 
-export function SearchCard({ countries, today, defaultCheckIn }: Props) {
+/** Every field maps to a real filter on /packages; nothing here is decorative. */
+export function SearchCard({ locations }: { locations: string[] }) {
   const router = useRouter();
-  const [checkIn, setCheckIn] = useState(defaultCheckIn);
-  const [checkOut, setCheckOut] = useState(addDays(defaultCheckIn, 3));
+  const [pending, setPending] = useState(false);
 
   return (
     <form
-      className="rounded-[var(--radius-card)] bg-white p-4 shadow-[var(--shadow-card)] sm:p-5"
+      className="rounded-[var(--radius-card)] bg-white p-5 shadow-[var(--shadow-card)] sm:p-6"
       onSubmit={(e) => {
         e.preventDefault();
         const fd = new FormData(e.currentTarget);
         const qs = new URLSearchParams();
-        const country = String(fd.get("country") || "");
-        const guests = String(fd.get("guests") || "");
-        if (country) qs.set("country", country);
-        if (guests) qs.set("guests", guests);
+        for (const key of ["q", "duration", "maxPrice", "guests"]) {
+          const v = String(fd.get(key) ?? "").trim();
+          if (v) qs.set(key, v);
+        }
+        setPending(true);
+        startNavigationProgress();
         router.push(`/packages${qs.size ? `?${qs}` : ""}`);
       }}
     >
-      <div role="tablist" aria-label="Search type" className="flex rounded-full bg-cloud p-1 text-sm">
-        <button
-          type="button"
-          role="tab"
-          aria-selected="true"
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-white py-2 font-medium shadow-sm"
-        >
-          <PlaneIcon className="h-4 w-4" /> Tour
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected="false"
-          disabled
-          title="Coming soon"
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full py-2 text-ink-muted"
-        >
-          <FlightIcon className="h-4 w-4" /> Flight
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected="false"
-          disabled
-          title="Coming soon"
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full py-2 text-ink-muted"
-        >
-          <HotelIcon className="h-4 w-4" /> Hotels
-        </button>
-      </div>
+      <p className="font-display text-2xl text-maroon">Find your trip</p>
+      <p className="mt-0.5 text-sm text-ink-soft">Search by place, length and budget.</p>
 
       <div className="mt-4">
-        <Label htmlFor="s-country">Destination</Label>
+        <Label htmlFor="s-q">Where to?</Label>
         <div className="relative">
           <PinIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
-          <Select id="s-country" name="country" className="pl-9" defaultValue="">
-            <option value="">Anywhere</option>
-            {countries.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
+          <Input id="s-q" name="q" list="s-locations" placeholder="Kerala, Ladakh, Goa…" className="pl-9" autoComplete="off" />
+          <datalist id="s-locations">
+            {locations.map((l) => (
+              <option key={l} value={l} />
             ))}
-          </Select>
+          </datalist>
         </div>
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-3">
         <div>
-          <Label htmlFor="s-checkin">Check in</Label>
+          <Label htmlFor="s-duration">Duration</Label>
           <div className="relative">
-            <CalendarIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
-            <Input
-              id="s-checkin"
-              name="checkIn"
-              type="date"
-              className="pl-9"
-              min={today}
-              value={checkIn}
-              onChange={(e) => {
-                const v = e.target.value;
-                if (!v) return;
-                setCheckIn(v);
-                if (checkOut <= v) setCheckOut(addDays(v, 3));
-              }}
-            />
+            <ClockIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
+            <Select id="s-duration" name="duration" defaultValue="" className="pl-9">
+              <option value="">Any</option>
+              {(Object.keys(DURATIONS) as (keyof typeof DURATIONS)[]).map((k) => (
+                <option key={k} value={k}>{DURATIONS[k].label}</option>
+              ))}
+            </Select>
           </div>
         </div>
         <div>
-          <Label htmlFor="s-checkout">Check out</Label>
+          <Label htmlFor="s-guests">Guests</Label>
           <div className="relative">
-            <CalendarIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
-            <Input
-              id="s-checkout"
-              name="checkOut"
-              type="date"
-              className="pl-9"
-              min={addDays(checkIn, 1)}
-              value={checkOut}
-              onChange={(e) => e.target.value && setCheckOut(e.target.value)}
-            />
+            <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
+            <Input id="s-guests" name="guests" type="number" inputMode="numeric" min={1} max={20} defaultValue={2} className="pl-9" />
           </div>
         </div>
       </div>
 
       <div className="mt-3">
-        <Label htmlFor="s-guests">Guests</Label>
-        <div className="relative">
-          <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted" />
-          <Input
-            id="s-guests"
-            name="guests"
-            type="number"
-            min={1}
-            max={20}
-            defaultValue={2}
-            className="pl-9"
-          />
-        </div>
+        <Label htmlFor="s-budget">Budget per person</Label>
+        <Select id="s-budget" name="maxPrice" defaultValue="">
+          {BUDGETS.map((b) => (
+            <option key={b.value} value={b.value}>{b.label}</option>
+          ))}
+        </Select>
       </div>
 
-      <Button type="submit" size="lg" className="mt-4 w-full">
-        Find packages
+      <Button type="submit" size="lg" className="mt-5 w-full" loading={pending}>
+        {pending ? "Searching…" : "Search packages"}
       </Button>
     </form>
   );

@@ -117,6 +117,19 @@ export async function getHomePackages(limit = 5) {
   return (data ?? []) as PackageCard[];
 }
 
+/** Distinct place names (location and country) for search suggestions. */
+export async function getLocations() {
+  const sb = createPublicClient();
+  const { data, error } = await sb.from("packages").select("location, country").eq("is_published", true);
+  if (error) throw new Error(`getLocations: ${error.message}`);
+  const names = new Set<string>();
+  for (const r of data ?? []) {
+    names.add(r.country);
+    for (const part of r.location.split(/,| and /)) if (part.trim()) names.add(part.trim());
+  }
+  return [...names].sort();
+}
+
 export async function getCountries() {
   const sb = createPublicClient();
   const { data, error } = await sb

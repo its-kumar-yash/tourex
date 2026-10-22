@@ -1,44 +1,38 @@
 /** Marketing copy. Edit freely; nothing here is read from the database. */
 export const site = {
   hero: {
-    title: ["Let’s find your", "next adventure"],
+    kicker: "अतिथि देवो भव",
+    kickerMeaning: "Guests are like family",
+    title: ["Let’s find your", "next yatra"],
     subtitle:
-      "Hand-picked tour packages across India and beyond, with local guides who know every turn of the road.",
+      "Hand-picked tours across India and beyond, led by local guides who know every gali, ghat and mountain road.",
   },
-  statement: "Take the step and explore the world waiting for you.",
   about: {
-    title: "Traveling brings you closer to new places, people, and memories",
-    body: "Traveling changes you. You see new places, meet new people, and become a new version of yourself.",
+    kicker: "हमारी कहानी",
+    title: "Travel that brings you closer to people, places and memories",
+    body: "We are a desi travel company. Every itinerary is planned by people who have travelled it themselves, with honest rupee pricing and no hidden extras.",
     stats: [
-      { value: "97%", label: "Customer satisfaction" },
-      { value: "85+", label: "Popular destinations" },
-      { value: "245+", label: "Experienced guides" },
+      { value: "97%", label: "Happy travellers" },
+      { value: "85+", label: "Destinations" },
+      { value: "245+", label: "Local guides" },
     ],
   },
   features: [
-    {
-      title: "Ease of travel",
-      body: "Make your holiday trip easy and comfortable with a professional team handling every detail.",
-      icon: "route",
-    },
-    {
-      title: "Local staff help",
-      body: "Professional local guides so you will not miss the hidden places only locals know.",
-      icon: "guide",
-    },
-    {
-      title: "Safe and reliable",
-      body: "Experienced and professional team; your safety is guaranteed from pickup to drop.",
-      icon: "shield",
-    },
+    { title: "Local guides", body: "Guides from the region who show you the places only locals know.", icon: "guide" },
+    { title: "Desi hospitality", body: "Home-style food, warm stays and a team that treats you like family.", icon: "heart" },
+    { title: "Honest ₹ pricing", body: "One clear per-person price. No hidden charges, no surprises.", icon: "rupee" },
+    { title: "Safe and reliable", body: "Verified stays and drivers, and help on call from pickup to drop.", icon: "shield" },
   ],
   cta: {
-    title: "Get a good travel experience",
-    body: "A good travel experience is not just about the places visited, but also the stories and lessons brought back home.",
+    kicker: "चलो घूमने चलें",
+    title: "Ready for your next yatra?",
+    body: "Tell us where you want to go. We will plan the rest, from the first chai to the last sunset.",
   },
   contact: {
     email: "hello@desitoursandtravels.example",
     phone: "+91 98765 43210",
-    address: "Desi Tours and Travels, New Delhi, India",
+    whatsapp: "919876543210",
+    address: "Desi Tours and Travels, Connaught Place, New Delhi 110001, India",
+    hours: "Mon–Sat, 9:30 am to 7:00 pm IST",
   },
 } as const;

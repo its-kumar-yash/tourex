@@ -47,7 +47,7 @@ export default async function AdminOverview() {
         <Kpi label="Published packages" value={published} hint={`${(packages.data ?? []).length - published} drafts`} />
       </div>
 
-      <div className="mt-10 grid gap-8 xl:grid-cols-[1fr_320px]">
+      <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
         <section>
           <div className="flex items-baseline justify-between">
             <h2 className="text-lg font-medium">Latest booking requests</h2>

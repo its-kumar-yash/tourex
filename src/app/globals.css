@@ -1,26 +1,44 @@
 @import "tailwindcss";
 
 /*
-  Design tokens, taken from the reference layout in docs/design-reference.webp:
-  near-black ink for text and primary buttons, a pale blue page frame, soft
-  cloud surfaces and a sky-blue accent pill.
+  Desi palette: sandstone and cream surfaces, kumkum maroon for primary
+  actions, saffron and marigold accents, peacock teal for calm details.
+  Token names (ink, cloud, sky, line) are kept so every component picks the
+  palette up without changes.
 */
 @theme {
-  --color-ink: #111111;
-  --color-ink-soft: #4b5059;
-  --color-ink-muted: #6b7280;
-  --color-mist: #eaf2f8;
-  --color-cloud: #f6f8fa;
-  --color-sky: #dcebf7;
-  --color-sky-deep: #9fc6e4;
-  --color-line: #e3e8ee;
+  --color-white: #fffcf7;
+  --color-ink: #2b1a12;
+  --color-ink-soft: #5b4636;
+  --color-ink-muted: #806a58;
+  --color-mist: #f3e6d3;
+  --color-cloud: #fbf2e5;
+  --color-sky: #fde3c3;
+  --color-sky-deep: #e9a55a;
+  --color-line: #eadbc6;
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --color-maroon: #8a1c3b;
+  --color-maroon-dark: #6b1530;
+  --color-saffron: #e2741d;
+  /* Text and white-on-saffron fills: 4.5:1+ on cream and white. */
+  --color-saffron-deep: #a84d0c;
+  --color-saffron-dark: #b8560f;
+  --color-marigold: #f3a712;
+  --color-peacock: #0f6e6e;
+
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-rozha), var(--font-rozha-deva), Georgia, serif;
 
   --radius-card: 1.5rem;
   --radius-pill: 999px;
 
-  --shadow-card: 0 12px 40px -12px rgb(17 17 17 / 0.18);
+  --shadow-card: 0 14px 40px -14px rgb(91 40 20 / 0.25);
+
+  --animate-progress: progress 1.2s ease-in-out infinite;
+  @keyframes progress {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(250%); }
+  }
 }
 
 html {
@@ -34,13 +52,42 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Tight display tracking, as in the reference headings. */
+/* Rozha One ships a single weight; never fake-bold it. */
 .display {
-  letter-spacing: -0.03em;
-  line-height: 1.02;
+  font-family: var(--font-display);
+  font-weight: 400 !important;
+  letter-spacing: -0.005em;
+  line-height: 1.08;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+/* Toran: festive bunting strip in saffron, maroon, marigold and peacock. */
+.toran {
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='10' viewBox='0 0 64 10'%3E%3Cpath d='M0 0h16L8 10z' fill='%23e2741d'/%3E%3Cpath d='M16 0h16l-8 10z' fill='%238a1c3b'/%3E%3Cpath d='M32 0h16l-8 10z' fill='%23f3a712'/%3E%3Cpath d='M48 0h16l-8 10z' fill='%230f6e6e'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 64px 10px;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-sky-deep);
+  outline: 2px solid var(--color-saffron);
   outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-sky);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--color-maroon);
 }

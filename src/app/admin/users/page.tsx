@@ -1,7 +1,9 @@
+import { PendingButton } from "@/components/ui/pending-button";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth/user";
 import { setUserRole } from "@/lib/admin/actions";
 import { formatDate } from "@/lib/format";
+import { formatPhone } from "@/lib/phone";
 import { PageHeader, smallButton, table } from "@/components/admin/ui";
 
 export default async function AdminUsers() {
@@ -36,7 +38,7 @@ export default async function AdminUsers() {
             {rows.map((u) => (
               <tr key={u.id}>
                 <td className={table.td}>{u.full_name ?? <span className="text-ink-muted">no name</span>}</td>
-                <td className={table.td}>{u.phone ?? "—"}</td>
+                <td className={table.td}>{u.phone ? <a href={`tel:${u.phone}`} className="hover:underline">{formatPhone(u.phone)}</a> : "—"}</td>
                 <td className={table.td}>{formatDate(u.created_at.slice(0, 10))}</td>
                 <td className={table.td}>
                   {counts[u.id]?.total ?? 0}
@@ -49,9 +51,9 @@ export default async function AdminUsers() {
                     <form action={setUserRole}>
                       <input type="hidden" name="id" value={u.id} />
                       <input type="hidden" name="role" value={u.role === "admin" ? "user" : "admin"} />
-                      <button type="submit" className={smallButton}>
+                      <PendingButton className={smallButton}>
                         {u.role === "admin" ? "Admin · demote" : "User · make admin"}
-                      </button>
+                      </PendingButton>
                     </form>
                   )}
                 </td>

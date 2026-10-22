@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { createBooking } from "@/lib/bookings/actions";
 import { addDays, formatPrice, plural, toISODate } from "@/lib/format";
+import { formatPhone } from "@/lib/phone";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/field";
 
@@ -55,7 +56,7 @@ export function ReserveCard(p: Props) {
         setAuth({
           signedIn: true,
           name: profile?.full_name ?? (data.user.user_metadata?.full_name as string) ?? "",
-          phone: profile?.phone ?? "",
+          phone: formatPhone(profile?.phone),
         });
     });
     return () => {
@@ -68,11 +69,11 @@ export function ReserveCard(p: Props) {
   return (
     <form
       action={formAction}
-      className="rounded-[var(--radius-card)] border border-line bg-white p-5 shadow-[var(--shadow-card)]"
+      className="rounded-[var(--radius-card)] border border-line bg-white p-5 shadow-[var(--shadow-card)] sm:p-6"
     >
       <input type="hidden" name="slug" value={p.slug} />
       <p className="text-sm text-ink-soft">From</p>
-      <p className="text-3xl font-semibold">
+      <p className="text-3xl font-semibold text-maroon">
         {formatPrice(p.priceMinor, p.currency)}
         <span className="text-base font-normal text-ink-soft"> / person</span>
       </p>
@@ -117,7 +118,7 @@ export function ReserveCard(p: Props) {
           </div>
           <div>
             <Label htmlFor="r-phone">Phone</Label>
-            <Input id="r-phone" name="contact_phone" type="tel" required defaultValue={auth.phone} autoComplete="tel" placeholder="+91 98765 43210" />
+            <Input id="r-phone" name="contact_phone" type="tel" required defaultValue={auth.phone} autoComplete="tel" placeholder="98765 43210" inputMode="tel" />
           </div>
           <div>
             <Label htmlFor="r-note">Note (optional)</Label>
@@ -145,8 +146,10 @@ export function ReserveCard(p: Props) {
         </p>
       )}
 
-      {auth?.signedIn ? (
-        <Button type="submit" size="lg" className="mt-5 w-full" disabled={pending}>
+      {auth === null ? (
+        <div className="mt-5 h-13 animate-pulse rounded-full bg-cloud" aria-hidden="true" />
+      ) : auth.signedIn ? (
+        <Button type="submit" size="lg" className="mt-5 w-full" loading={pending}>
           {pending ? "Sending request…" : "Request to reserve"}
         </Button>
       ) : (

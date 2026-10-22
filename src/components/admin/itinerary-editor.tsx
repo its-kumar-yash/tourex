@@ -59,7 +59,7 @@ export function ItineraryEditor({ packageId, days: initial }: { packageId: strin
         <button type="button" className={smallButton} onClick={() => setDays((d) => [...d, { title: "", description: "" }])}>
           + Add day
         </button>
-        <Button type="submit" size="sm" disabled={pending}>{pending ? "Saving…" : "Save itinerary"}</Button>
+        <Button type="submit" size="sm" loading={pending}>{pending ? "Saving…" : "Save itinerary"}</Button>
         {state.error && <span role="alert" className="text-sm text-red-700">{state.error}</span>}
         {state.message && <span role="status" className="text-sm text-ink-soft">{state.message}</span>}
       </div>

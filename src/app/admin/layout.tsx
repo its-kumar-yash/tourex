@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await requireAdmin();
   return (
-    <div className="grid min-h-[70vh] lg:grid-cols-[220px_1fr]">
+    <div className="grid min-h-[70vh] grid-cols-[minmax(0,1fr)] content-start lg:grid-cols-[220px_minmax(0,1fr)] lg:content-stretch">
       <aside className="border-b border-line bg-cloud px-4 py-4 lg:border-b-0 lg:border-r lg:px-5 lg:py-8">
         <p className="text-xs uppercase tracking-wide text-ink-muted">Admin</p>
         <p className="mt-1 truncate text-sm font-medium">{user.profile?.full_name ?? user.email}</p>

@@ -9,10 +9,10 @@ export const metadata: Metadata = { title: "Reset your password" };
 export default function ForgotPasswordPage() {
   return (
     <>
-      <h1 className="display text-3xl font-medium">Reset your password</h1>
+      <h1 className="display text-3xl">Reset your password</h1>
       <p className="mt-2 text-sm text-ink-soft">We will email you a link to choose a new one.</p>
       <div className="mt-6">
-        <AuthForm action={requestPasswordReset} submitLabel="Send reset link">
+        <AuthForm action={requestPasswordReset} submitLabel="Send reset link" pendingLabel="Sending…">
           <div>
             <Label htmlFor="email">Email</Label>
             <Input id="email" name="email" type="email" autoComplete="email" required />
@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
         </AuthForm>
       </div>
       <p className="mt-6 text-center text-sm text-ink-soft">
-        <Link href="/login" className="font-medium text-ink hover:underline">
+        <Link href="/login" className="font-medium text-maroon hover:underline">
           Back to sign in
         </Link>
       </p>

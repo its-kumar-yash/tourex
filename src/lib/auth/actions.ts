@@ -5,8 +5,9 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { env } from "@/lib/env";
 import { safeNext } from "./redirect";
+import { normalizePhone } from "@/lib/phone";
 
-export type AuthState = { error?: string; message?: string };
+export type AuthState = { error?: string; message?: string; fields?: Record<string, string> };
 
 const str = (fd: FormData, key: string) => String(fd.get(key) ?? "").trim();
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,25 +34,31 @@ export async function signIn(_prev: AuthState, formData: FormData): Promise<Auth
 export async function signUp(_prev: AuthState, formData: FormData): Promise<AuthState> {
   const fullName = str(formData, "full_name");
   const email = str(formData, "email");
+  const phoneRaw = str(formData, "phone");
   const password = String(formData.get("password") ?? "");
   const next = safeNext(formData.get("next"));
-  if (fullName.length < 2) return { error: "Please enter your name." };
-  if (!EMAIL.test(email)) return { error: "Please enter a valid email." };
-  if (password.length < 8) return { error: "Password must be at least 8 characters." };
+  // Echo typed values back so a validation error never wipes the form.
+  const fields = { full_name: fullName, email, phone: phoneRaw };
+
+  if (fullName.length < 2) return { error: "Please enter your name.", fields };
+  if (!EMAIL.test(email)) return { error: "Please enter a valid email.", fields };
+  if (!phoneRaw) return { error: "Please enter your mobile number.", fields };
+  const phone = normalizePhone(phoneRaw);
+  if (!phone) return { error: "That mobile number doesn’t look right. Use 10 digits, or + and the country code.", fields };
+  if (password.length < 8) return { error: "Password must be at least 8 characters.", fields };
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { full_name: fullName },
+      data: { full_name: fullName, phone },
       emailRedirectTo: `${env.siteUrl}/auth/callback?next=${encodeURIComponent(next)}`,
     },
   });
-  if (error) return { error: error.message };
-  // Email confirmation on: no session yet.
+  if (error) return { error: error.message, fields };
   if (!data.session) {
-    return { message: "Almost there. Check your email for a confirmation link." };
+    return { message: `Almost there! We sent a confirmation link to ${email}. Open it to finish signing up.` };
   }
   redirect(next);
 }
@@ -83,9 +90,11 @@ export async function updatePassword(_prev: AuthState, formData: FormData): Prom
 
 export async function updateProfile(_prev: AuthState, formData: FormData): Promise<AuthState> {
   const fullName = str(formData, "full_name");
-  const phone = str(formData, "phone");
+  const phoneRaw = str(formData, "phone");
   if (fullName.length < 2) return { error: "Please enter your name." };
-  if (phone && !/^[+\d][\d\s-]{6,19}$/.test(phone)) return { error: "That phone number looks wrong." };
+  if (!phoneRaw) return { error: "Please enter your mobile number." };
+  const phone = normalizePhone(phoneRaw);
+  if (!phone) return { error: "That mobile number doesn’t look right." };
 
   const supabase = await createClient();
   const {
@@ -94,7 +103,7 @@ export async function updateProfile(_prev: AuthState, formData: FormData): Promi
   if (!user) redirect("/login?next=/account");
   const { error } = await supabase
     .from("profiles")
-    .update({ full_name: fullName, phone: phone || null })
+    .update({ full_name: fullName, phone })
     .eq("id", user.id);
   if (error) return { error: "Could not save your profile. Please try again." };
   revalidatePath("/account");

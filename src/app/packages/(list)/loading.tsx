@@ -8,7 +8,7 @@ export default function Loading() {
     <div className="px-4 py-8 sm:px-8 sm:py-12">
       <Skeleton className="h-12 w-72" />
       <Skeleton className="mt-3 h-5 w-40" />
-      <div className="mt-8 grid gap-8 lg:grid-cols-[260px_1fr]">
+      <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
         <Skeleton className="hidden h-[520px] lg:block" />
         <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (

@@ -69,7 +69,7 @@ export function PackageForm({ pkg }: { pkg?: Tables<"packages"> }) {
 
       {state.error && <p role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>}
       {state.message && <p role="status" className="rounded-xl bg-sky px-3 py-2 text-sm">{state.message}</p>}
-      <Button type="submit" disabled={pending}>{pending ? "Saving…" : pkg ? "Save changes" : "Create package"}</Button>
+      <Button type="submit" loading={pending}>{pending ? "Saving…" : pkg ? "Save changes" : "Create package"}</Button>
     </form>
   );
 }

@@ -1,3 +1,4 @@
+import { PendingButton } from "@/components/ui/pending-button";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,7 +58,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         <p role="status" className="mt-6 rounded-[var(--radius-card)] bg-sky px-5 py-4">Password updated.</p>
       )}
 
-      <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_360px]">
+      <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_360px]">
         <section>
           <h2 className="text-xl font-medium">Your bookings</h2>
           {bookings.length === 0 ? (
@@ -97,9 +98,9 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
                     {b.status === "pending" && (
                       <form action={cancelBooking} className="mt-3">
                         <input type="hidden" name="id" value={b.id} />
-                        <button type="submit" className="text-sm text-ink-soft underline-offset-4 hover:underline">
+                        <PendingButton confirm="Cancel this booking request?" className="text-sm text-ink-soft underline-offset-4 hover:underline">
                           Cancel request
-                        </button>
+                        </PendingButton>
                       </form>
                     )}
                   </div>
