@@ -5,7 +5,7 @@ export const site = {
     kickerMeaning: "Guests are like family",
     title: ["Let’s find your", "next yatra"],
     subtitle:
-      "Hand-picked tours across India and beyond, led by local guides who know every gali, ghat and mountain road.",
+      "Hand-picked India tour packages and holidays abroad, led by local guides who know every gali, ghat and mountain road.",
   },
   about: {
     kicker: "हमारी कहानी",

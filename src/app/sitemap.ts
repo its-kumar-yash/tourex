@@ -7,15 +7,20 @@ export const revalidate = 3600;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = env.siteUrl.replace(/\/$/, "");
   const packages = await getAllPackageSlugs();
+  const latest = packages.reduce<string | undefined>(
+    (max, p) => (!max || p.updated_at > max ? p.updated_at : max),
+    undefined,
+  );
   return [
-    { url: `${base}/`, changeFrequency: "weekly", priority: 1 },
-    { url: `${base}/packages`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${base}/`, lastModified: latest, changeFrequency: "weekly", priority: 1 },
+    { url: `${base}/packages`, lastModified: latest, changeFrequency: "daily", priority: 0.9 },
     { url: `${base}/about`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/contact`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/privacy`, changeFrequency: "yearly", priority: 0.2 },
     ...packages.map((p) => ({
       url: `${base}/packages/${p.slug}`,
       lastModified: p.updated_at,
+      images: p.cover_image_url ? [p.cover_image_url] : undefined,
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),

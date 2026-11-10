@@ -160,7 +160,7 @@ export async function getAllPackageSlugs() {
   const sb = createPublicClient();
   const { data, error } = await sb
     .from("packages")
-    .select("slug, updated_at")
+    .select("slug, updated_at, cover_image_url")
     .eq("is_published", true);
   if (error) throw new Error(`getAllPackageSlugs: ${error.message}`);
   return data ?? [];

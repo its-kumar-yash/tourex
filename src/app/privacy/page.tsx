@@ -4,6 +4,7 @@ import { site } from "@/content/site";
 import { CookieSettingsButton } from "@/components/consent/cookie-settings-button";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacy" },
   title: "Privacy and cookies",
   description: `How ${BRAND} uses personal data and cookies.`,
 };

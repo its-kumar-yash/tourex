@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getHomePackages, getLocations } from "@/lib/data/packages";
 import { Hero } from "@/components/home/hero";
 import { Statement } from "@/components/home/statement";
@@ -7,6 +8,8 @@ import { Features } from "@/components/home/features";
 import { Cta } from "@/components/home/cta";
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default async function HomePage() {
   const [packages, locations] = await Promise.all([getHomePackages(5), getLocations()]);

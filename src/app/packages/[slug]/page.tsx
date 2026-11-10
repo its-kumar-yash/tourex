@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllPackageSlugs, getPackageBySlug } from "@/lib/data/packages";
 import { formatPrice, plural } from "@/lib/format";
@@ -10,7 +9,17 @@ import { ReserveCard } from "@/components/packages/reserve-card";
 import { TrackPackageView } from "@/components/analytics/track-package-view";
 import { Rating } from "@/components/ui/rating";
 import { MobileReserveBar } from "@/components/packages/mobile-reserve-bar";
-import { ArrowLeftIcon, ClockIcon, PinIcon, UserIcon } from "@/components/ui/icons";
+import { ClockIcon, PinIcon, UserIcon } from "@/components/ui/icons";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+import { BRAND } from "@/components/logo";
+import {
+  ORG_ID,
+  absoluteUrl,
+  breadcrumbJsonLd,
+  jsonLdHtml,
+  packageSeoDescription,
+  packageSeoTitle,
+} from "@/lib/seo";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -25,14 +34,21 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pkg = await getPackageBySlug((await params).slug);
   if (!pkg) return { title: "Package not found", robots: { index: false } };
+  const title = packageSeoTitle(pkg);
+  const description = packageSeoDescription(pkg);
+  const url = `/packages/${pkg.slug}`;
   return {
-    title: pkg.title,
-    description: pkg.summary,
-    alternates: { canonical: `/packages/${pkg.slug}` },
+    title,
+    description,
+    alternates: { canonical: url },
     openGraph: {
-      title: pkg.title,
-      description: pkg.summary,
-      images: pkg.cover_image_url ? [{ url: pkg.cover_image_url }] : undefined,
+      type: "website",
+      siteName: BRAND,
+      locale: "en_IN",
+      url,
+      title,
+      description,
+      images: pkg.cover_image_url ? [{ url: pkg.cover_image_url, alt: pkg.title }] : undefined,
     },
   };
 }
@@ -42,34 +58,57 @@ export default async function PackagePage({ params }: Props) {
   const pkg = await getPackageBySlug(slug);
   if (!pkg) notFound();
 
-  const jsonLd = {
+  const url = absoluteUrl(`/packages/${pkg.slug}`);
+  const images = [pkg.cover_image_url, ...pkg.package_images.map((i) => i.url)].filter(
+    (u, i, all): u is string => Boolean(u) && all.indexOf(u) === i,
+  );
+  const crumbs = [
+    { name: "Home", path: "/" },
+    { name: "Tour packages", path: "/packages" },
+    { name: pkg.title, path: `/packages/${pkg.slug}` },
+  ];
+  // TouristTrip has no rich result of its own, but it tells Google exactly
+  // what the page sells. The star rating is left out: it is set by hand, not
+  // collected from reviews, and Google penalises self-awarded review markup.
+  const tripJsonLd = {
     "@context": "https://schema.org",
     "@type": "TouristTrip",
+    "@id": `${url}#trip`,
     name: pkg.title,
     description: pkg.summary,
-    image: pkg.cover_image_url ?? undefined,
+    url,
+    image: images.length > 0 ? images : undefined,
     touristType: "Leisure",
+    provider: { "@id": ORG_ID },
+    itinerary:
+      pkg.package_itinerary.length > 0
+        ? {
+            "@type": "ItemList",
+            numberOfItems: pkg.package_itinerary.length,
+            itemListElement: pkg.package_itinerary.map((d) => ({
+              "@type": "ListItem",
+              position: d.day_no,
+              item: { "@type": "TouristAttraction", name: `Day ${d.day_no}: ${d.title}`, description: d.description || undefined },
+            })),
+          }
+        : undefined,
+    subjectOf: { "@type": "WebPage", "@id": url },
     offers: {
       "@type": "Offer",
+      url,
       price: (pkg.price_minor / 100).toFixed(0),
       priceCurrency: pkg.currency,
       availability: "https://schema.org/InStock",
+      seller: { "@id": ORG_ID },
     },
   };
 
   return (
     <article className="px-4 pb-28 pt-6 sm:px-8 sm:pt-10 lg:pb-12">
       <TrackPackageView packageId={pkg.id} slug={pkg.slug} />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <Link
-        href="/packages"
-        className="inline-flex items-center gap-1 rounded-full px-2 py-1 -ml-2 text-sm text-ink-soft hover:bg-cloud hover:text-ink"
-      >
-        <ArrowLeftIcon className="h-4 w-4" /> All packages
-      </Link>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(tripJsonLd)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(breadcrumbJsonLd(crumbs))} />
+      <Breadcrumbs items={crumbs} />
 
       <header className="mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>

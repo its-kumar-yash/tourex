@@ -9,6 +9,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { env } from "@/lib/env";
 import { BRAND } from "@/components/logo";
+import { jsonLdHtml, siteJsonLd } from "@/lib/seo";
 import "./globals.css";
 
 // Both families are by Indian Type Foundry. Rozha One carries Devanagari for
@@ -38,12 +39,15 @@ const rozhaDeva = Rozha_One({
 export const metadata: Metadata = {
   metadataBase: new URL(env.siteUrl),
   title: {
-    default: `${BRAND} — Hand-picked tours across India`,
+    default: `${BRAND} | India Tour Packages and Holidays`,
     template: `%s · ${BRAND}`,
   },
   description:
-    "Hand-picked tour packages across India and beyond, with local guides, clear rupee pricing and desi hospitality. Browse, compare and reserve your trip.",
+    "Tour packages for Kerala, Ladakh, Goa, Rajasthan, Agra and Indonesia with local guides and clear per-person ₹ prices. Browse and reserve your trip today.",
+  applicationName: BRAND,
   openGraph: { type: "website", siteName: BRAND, locale: "en_IN" },
+  twitter: { card: "summary_large_image" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = { themeColor: "#8a1c3b" };
@@ -52,6 +56,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en-IN" className={`${poppins.variable} ${rozha.variable} ${rozhaDeva.variable}`}>
       <body className="flex min-h-dvh flex-col">
+        <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdHtml(siteJsonLd())} />
         <Suspense fallback={null}>
           <NavigationProgress />
         </Suspense>

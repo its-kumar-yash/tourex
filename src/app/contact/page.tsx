@@ -5,8 +5,9 @@ import { ClockIcon, MailIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "@/compone
 import { buttonClasses } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Contact us",
-  description: "Call, WhatsApp or email us about any package or a custom trip. We reply within a working day.",
+  alternates: { canonical: "/contact" },
+  title: "Contact us for tour packages and custom trips",
+  description: "Call, WhatsApp or email Desi Tours and Travels about any tour package or a custom India trip. We reply within a working day.",
 };
 
 const cards = [
