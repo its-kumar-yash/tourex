@@ -1,6 +1,7 @@
 import { env } from "@/lib/env";
 import { BRAND } from "@/components/logo";
 import { formatPrice, plural } from "@/lib/format";
+import { site } from "@/content/site";
 
 /** Absolute URL on the live site for a path such as "/packages". */
 export function absoluteUrl(path = "/") {
@@ -11,8 +12,7 @@ export const ORG_ID = absoluteUrl("/#organization");
 
 /**
  * The business and the website, for Google's knowledge panel and site name.
- * Contact details are left out on purpose until real ones replace the
- * placeholders in src/content/site.ts: a fake phone or address hurts local SEO.
+ * Name, address and phone must match the Google Business Profile exactly.
  */
 export function siteJsonLd() {
   return {
@@ -27,10 +27,21 @@ export function siteJsonLd() {
         logo: absoluteUrl("/apple-icon"),
         image: absoluteUrl("/opengraph-image"),
         description:
-          "Indian travel company offering hand-picked tour packages across India and abroad, with local guides and clear per-person rupee pricing.",
+          "Delhi-based travel agency offering hand-picked tour packages across India and abroad, with local guides and clear per-person rupee pricing.",
         priceRange: "₹₹",
         currenciesAccepted: "INR",
         areaServed: { "@type": "Country", name: "India" },
+        telephone: site.contact.phone.replace(/\s/g, ""),
+        email: site.contact.email,
+        address: { "@type": "PostalAddress", ...site.contact.postal },
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          telephone: site.contact.phone.replace(/\s/g, ""),
+          email: site.contact.email,
+          areaServed: "IN",
+          availableLanguage: ["English", "Hindi"],
+        },
       },
       {
         "@type": "WebSite",

@@ -29,10 +29,18 @@ export const site = {
     body: "Tell us where you want to go. We will plan the rest, from the first chai to the last sunset.",
   },
   contact: {
-    email: "hello@desitoursandtravels.example",
-    phone: "+91 98765 43210",
-    whatsapp: "919876543210",
-    address: "Desi Tours and Travels, Connaught Place, New Delhi 110001, India",
+    email: "desitourandtravels@gmail.com",
+    phone: "+91 89201 29127",
+    whatsapp: "918920129127",
+    address: "Plot No. 1, 1st Floor, Rajendra Park, Nangloi, New Delhi, Delhi 110041, India",
+    // Same address split for Google's structured data (src/lib/seo.ts).
+    postal: {
+      streetAddress: "Plot No. 1, 1st Floor, Rajendra Park, Nangloi",
+      addressLocality: "New Delhi",
+      addressRegion: "Delhi",
+      postalCode: "110041",
+      addressCountry: "IN",
+    },
     hours: "Mon–Sat, 9:30 am to 7:00 pm IST",
   },
 } as const;

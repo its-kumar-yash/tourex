@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     template: `%s · ${BRAND}`,
   },
   description:
-    "Tour packages for Kerala, Ladakh, Goa, Rajasthan, Agra and Indonesia with local guides and clear per-person ₹ prices. Browse and reserve your trip today.",
+    "Delhi travel agency with tour packages for Kerala, Ladakh, Goa, Rajasthan, Agra and Indonesia. Local guides, clear per-person ₹ prices. Reserve today.",
   applicationName: BRAND,
   openGraph: { type: "website", siteName: BRAND, locale: "en_IN" },
   twitter: { card: "summary_large_image" },

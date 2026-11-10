@@ -34,7 +34,17 @@ export default function ContactPage() {
               </span>
               <span className="min-w-0">
                 <span className="block text-sm text-ink-soft">{c.label}</span>
-                <span className="block font-medium [overflow-wrap:anywhere]">{c.value}</span>
+                <span className="block font-medium [overflow-wrap:anywhere]">
+                  {/* Let a long email wrap after the @ rather than mid-domain. */}
+                  {c.label === "Email" ? (
+                    <>
+                      {c.value.split("@")[0]}@<wbr />
+                      {c.value.split("@")[1]}
+                    </>
+                  ) : (
+                    c.value
+                  )}
+                </span>
               </span>
             </>
           );
