@@ -50,3 +50,6 @@ next-env.d.ts
 # python virtualenvs (tooling scripts)
 .venv/
 venv/
+
+# local agent notes
+CLAUDE.md

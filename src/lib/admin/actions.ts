@@ -12,9 +12,19 @@ export type ActionState = { error?: string; message?: string };
 const str = (fd: FormData, k: string) => String(fd.get(k) ?? "").trim();
 const num = (fd: FormData, k: string) => Number(String(fd.get(k) ?? "").replace(/,/g, ""));
 
-function revalidatePackage(slug?: string | null) {
+/**
+ * Every surface a package change touches. Pass `visibility` when the change can
+ * add or remove a package from the public site — a new or renamed slug,
+ * publish, unpublish, delete. `/packages/[slug]` is then invalidated as a whole
+ * route, the only form that clears a page generated on demand for a slug that
+ * did not exist at the last build, including the cached 404 a package picks up
+ * if its URL is opened while it is still a draft. Photo and itinerary edits
+ * skip it: they would drop the ISR cache for every other package page too.
+ */
+function revalidatePackage(slug?: string | null, visibility = false) {
   revalidatePath("/");
   revalidatePath("/packages");
+  if (visibility) revalidatePath("/packages/[slug]", "page");
   revalidatePath("/sitemap.xml");
   if (slug) revalidatePath(`/packages/${slug}`);
   revalidatePath("/admin/packages");
@@ -71,8 +81,13 @@ export async function savePackage(_prev: ActionState, fd: FormData): Promise<Act
     savedId = data.id;
   }
 
-  revalidatePackage(slug);
+  revalidatePackage(slug, true);
   if (previousSlug && previousSlug !== slug) revalidatePath(`/packages/${previousSlug}`);
+  // React resets the form once the action resolves, restoring the defaults from
+  // this page's last server render. Without revalidating it the checkboxes snap
+  // back to the pre-save values, so a package just published looks like a draft
+  // and the next "Save changes" posts no is_published and unpublishes it.
+  revalidatePath(`/admin/packages/${savedId}`);
   if (!id) redirect(`/admin/packages/${savedId}?created=1`);
   return { message: "Saved." };
 }
@@ -96,7 +111,7 @@ export async function setPackageFlag(fd: FormData) {
     .eq("id", id)
     .select("slug")
     .maybeSingle();
-  revalidatePackage(data?.slug);
+  revalidatePackage(data?.slug, true);
   revalidatePath(`/admin/packages/${id}`);
 }
 
@@ -108,7 +123,7 @@ export async function deletePackage(fd: FormData) {
   const { data: pkg } = await supabase.from("packages").select("slug").eq("id", id).maybeSingle();
   const { error } = await supabase.from("packages").delete().eq("id", id);
   if (error) redirect(`/admin/packages/${id}?error=${encodeURIComponent("Cannot delete: this package has bookings. Unpublish it instead.")}`);
-  revalidatePackage(pkg?.slug);
+  revalidatePackage(pkg?.slug, true);
   redirect("/admin/packages?deleted=1");
 }
 

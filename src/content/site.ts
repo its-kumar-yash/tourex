@@ -29,7 +29,7 @@ export const site = {
     body: "Tell us where you want to go. We will plan the rest, from the first chai to the last sunset.",
   },
   contact: {
-    email: "hello@desitoursandtravels.example",
+    email: "desitourandtravels@gmail.com",
     phone: "+91 98765 43210",
     whatsapp: "919876543210",
     address: "Desi Tours and Travels, Connaught Place, New Delhi 110001, India",
