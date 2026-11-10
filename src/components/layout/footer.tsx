@@ -46,7 +46,10 @@ export function Footer() {
             <li>
               <a href={`mailto:${site.contact.email}`} className="inline-flex min-w-0 items-center gap-2 hover:text-white">
                 <MailIcon className="h-4 w-4 shrink-0 text-marigold" />
-                <span className="[overflow-wrap:break-word]">{site.contact.email}</span>
+                <span className="[overflow-wrap:anywhere]">
+                  {site.contact.email.split("@")[0]}@<wbr />
+                  {site.contact.email.split("@")[1]}
+                </span>
               </a>
             </li>
             <li className="text-white/60">{site.contact.hours}</li>

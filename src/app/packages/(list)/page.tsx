@@ -10,9 +10,9 @@ import { ActiveFilters } from "@/components/packages/active-filters";
 import { DURATIONS } from "@/lib/data/packages";
 
 export const metadata: Metadata = {
-  title: "Tour packages",
+  title: "Tour Packages: India and International Holidays",
   description:
-    "Browse all tour packages: beaches, mountains, heritage and island escapes across India, Indonesia and Japan.",
+    "Compare tour packages for Kerala, Ladakh, Goa, Rajasthan, Agra and Indonesia. Day-by-day itineraries, photos and clear per-person ₹ prices.",
   alternates: { canonical: "/packages" },
 };
 

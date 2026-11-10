@@ -5,8 +5,9 @@ import { ClockIcon, MailIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "@/compone
 import { buttonClasses } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Contact us",
-  description: "Call, WhatsApp or email us about any package or a custom trip. We reply within a working day.",
+  alternates: { canonical: "/contact" },
+  title: "Contact us for tour packages and custom trips",
+  description: "Call, WhatsApp or email Desi Tours and Travels about any tour package or a custom India trip. We reply within a working day.",
 };
 
 const cards = [
@@ -15,22 +16,6 @@ const cards = [
   { icon: MailIcon, label: "Email", value: site.contact.email, href: `mailto:${site.contact.email}` },
   { icon: ClockIcon, label: "Office hours", value: site.contact.hours },
 ] as const;
-
-/**
- * Long values (the email) get a break opportunity after the "@", so they wrap
- * into "name@" / "domain" rather than splitting mid-word.
- */
-function wrapValue(value: string) {
-  const at = value.indexOf("@");
-  if (at === -1) return value;
-  return (
-    <>
-      {value.slice(0, at + 1)}
-      <wbr />
-      {value.slice(at + 1)}
-    </>
-  );
-}
 
 export default function ContactPage() {
   return (
@@ -49,7 +34,17 @@ export default function ContactPage() {
               </span>
               <span className="min-w-0">
                 <span className="block text-sm text-ink-soft">{c.label}</span>
-                <span className="block font-medium [overflow-wrap:break-word]">{wrapValue(c.value)}</span>
+                <span className="block font-medium [overflow-wrap:anywhere]">
+                  {/* Let a long email wrap after the @ rather than mid-domain. */}
+                  {c.label === "Email" ? (
+                    <>
+                      {c.value.split("@")[0]}@<wbr />
+                      {c.value.split("@")[1]}
+                    </>
+                  ) : (
+                    c.value
+                  )}
+                </span>
               </span>
             </>
           );

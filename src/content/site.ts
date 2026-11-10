@@ -5,7 +5,7 @@ export const site = {
     kickerMeaning: "Guests are like family",
     title: ["Let’s find your", "next yatra"],
     subtitle:
-      "Hand-picked tours across India and beyond, led by local guides who know every gali, ghat and mountain road.",
+      "Hand-picked India tour packages and holidays abroad, led by local guides who know every gali, ghat and mountain road.",
   },
   about: {
     kicker: "हमारी कहानी",
@@ -30,9 +30,17 @@ export const site = {
   },
   contact: {
     email: "desitourandtravels@gmail.com",
-    phone: "+91 98765 43210",
-    whatsapp: "919876543210",
-    address: "Desi Tours and Travels, Connaught Place, New Delhi 110001, India",
+    phone: "+91 89201 29127",
+    whatsapp: "918920129127",
+    address: "Plot No. 1, 1st Floor, Rajendra Park, Nangloi, New Delhi, Delhi 110041, India",
+    // Same address split for Google's structured data (src/lib/seo.ts).
+    postal: {
+      streetAddress: "Plot No. 1, 1st Floor, Rajendra Park, Nangloi",
+      addressLocality: "New Delhi",
+      addressRegion: "Delhi",
+      postalCode: "110041",
+      addressCountry: "IN",
+    },
     hours: "Mon–Sat, 9:30 am to 7:00 pm IST",
   },
 } as const;

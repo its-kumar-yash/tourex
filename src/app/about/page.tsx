@@ -7,7 +7,8 @@ import { Cta } from "@/components/home/cta";
 import { Mandala } from "@/components/ui/motifs";
 
 export const metadata: Metadata = {
-  title: "About us",
+  alternates: { canonical: "/about" },
+  title: "About us: an Indian travel company",
   description: `${BRAND}: a desi travel company running small-group tours across India and beyond, planned by people who travel the routes themselves.`,
 };
 
