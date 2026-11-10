@@ -34,6 +34,13 @@ export function siteJsonLd() {
         telephone: site.contact.phone.replace(/\s/g, ""),
         email: site.contact.email,
         address: { "@type": "PostalAddress", ...site.contact.postal },
+        // Matches site.contact.hours (Mon–Sat, 9:30 am to 7:00 pm IST).
+        openingHoursSpecification: {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          opens: "09:30",
+          closes: "19:00",
+        },
         contactPoint: {
           "@type": "ContactPoint",
           contactType: "customer service",
