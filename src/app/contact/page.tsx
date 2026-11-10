@@ -22,9 +22,9 @@ export default function ContactPage() {
     <div className="px-4 py-14 sm:px-8 sm:py-20">
       <SectionHeading as="h1" kicker="नमस्ते" title="Contact us" subtitle="Questions about a package, or want a custom itinerary? We reply within a working day." />
 
-      {/* auto-fit with a 240px minimum: cards wrap instead of squeezing, and long
-          values like the email break inside their own card. */}
-      <ul className="mx-auto mt-12 grid max-w-5xl gap-4 [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
+      {/* Two up until xl, four across above it: the cards stay wide enough for
+          the email and the office hours to read on one or two tidy lines. */}
+      <ul className="mx-auto mt-12 grid max-w-6xl grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {cards.map((c) => {
           const Icon = c.icon;
           const inner = (
@@ -66,7 +66,7 @@ export default function ContactPage() {
         })}
       </ul>
 
-      <div className="mx-auto mt-6 flex max-w-5xl flex-col gap-4 rounded-[var(--radius-card)] border border-line bg-cloud p-5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto mt-6 flex max-w-6xl flex-col gap-4 rounded-[var(--radius-card)] border border-line bg-cloud p-5 sm:flex-row sm:items-center sm:justify-between">
         <p className="flex items-start gap-3">
           <PinIcon className="mt-0.5 h-5 w-5 shrink-0 text-maroon" />
           <span>
