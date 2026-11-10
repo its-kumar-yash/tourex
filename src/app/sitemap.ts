@@ -4,6 +4,15 @@ import { getAllPackageSlugs } from "@/lib/data/packages";
 
 export const revalidate = 3600;
 
+function xmlEscape(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = env.siteUrl.replace(/\/$/, "");
   const packages = await getAllPackageSlugs();
@@ -20,7 +29,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...packages.map((p) => ({
       url: `${base}/packages/${p.slug}`,
       lastModified: p.updated_at,
-      images: p.cover_image_url ? [p.cover_image_url] : undefined,
+      // Next.js writes image URLs into the XML unescaped, and Unsplash URLs carry
+      // `&`, which makes the whole sitemap unparseable for Google.
+      images: p.cover_image_url ? [xmlEscape(p.cover_image_url)] : undefined,
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),
